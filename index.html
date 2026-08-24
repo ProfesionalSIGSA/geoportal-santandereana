@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accesos rápidos — Geoportal Santandereana de Aseo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root{
+  --paper:#ECEEE6;
+  --paper-raised:#F6F7F1;
+  --ink:#17211A;
+  --ink-soft:#4B5642;
+  --line:#C7CBB9;
+  --line-strong:#9AA28C;
+  --accent:#D8600B;
+  --accent-tint:#F7DCBC;
+  --on-accent:#211002;
+  --moss:#3F6B4A;
+  --moss-tint:#DCE6DA;
+  --slate:#35566B;
+  --slate-tint:#DDE6E9;
+  --hero-bg:#141C17;
+  --hero-ink:#ECEEE6;
+  --hero-ink-soft:#AAB6A2;
+  --hero-line:rgba(236,238,230,0.20);
+  --hero-accent:#F58220;
+  --shadow:rgba(20,28,20,0.12);
+  --radius:3px;
+  --font-display:"Big Shoulders Display", "Arial Narrow", sans-serif;
+  --font-body:"Public Sans", -apple-system, "Segoe UI", sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+/* Todo lo de abajo vive dentro de .geo-body para no tocar el resto del sitio */
+.geo-body, .geo-body *{box-sizing:border-box;}
+.geo-body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.geo-body a{color:inherit;}
+.geo-body .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+/* ---------- hero ---------- */
+.geo-body .hero{
+  position:relative;
+  background:var(--hero-bg);
+  color:var(--hero-ink);
+  overflow:hidden;
+}
+.geo-body .hero-art{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  display:block;
+}
+.geo-body .hero-inner{
+  position:relative;
+  padding-top:76px;
+  padding-bottom:56px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:40px;
+  flex-wrap:wrap;
+}
+.geo-body .hero h1{
+  font-family:var(--font-display);
+  font-weight:900;
+  font-size:clamp(42px, 7vw, 76px);
+  line-height:0.94;
+  letter-spacing:0.005em;
+  text-transform:uppercase;
+  margin:0 0 18px;
+  text-wrap:balance;
+  max-width:15ch;
+}
+.geo-body .hero p{
+  font-size:16.5px;
+  color:var(--hero-ink-soft);
+  max-width:46ch;
+  margin:0;
+}
+.geo-body .hero-left{max-width:640px;}
+.geo-body .hero-stats{
+  display:flex;
+  gap:32px;
+  font-family:var(--font-mono);
+}
+.geo-body .hero-stats .stat dd{
+  margin:0;
+  font-size:28px;
+  font-weight:600;
+  color:var(--hero-ink);
+}
+.geo-body .hero-stats .stat dt{
+  margin:4px 0 0;
+  font-size:10.5px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--hero-ink-soft);
+}
+
+/* ---------- accesos rápidos ---------- */
+.geo-body .services{padding-top:52px;padding-bottom:8px;}
+.geo-body .section-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:24px;
+  flex-wrap:wrap;
+}
+.geo-body .section-head h2{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:26px;
+  text-transform:uppercase;
+  letter-spacing:0.01em;
+  margin:0;
+}
+.geo-body .section-head .hint{
+  font-family:var(--font-mono);
+  font-size:11.5px;
+  color:var(--ink-soft);
+  letter-spacing:0.02em;
+}
+
+.geo-body .group{margin-bottom:40px;}
+.geo-body .group:last-child{margin-bottom:0;}
+.geo-body .group-title{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  margin:0 0 14px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--line);
+}
+
+.geo-body .grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:18px;
+}
+.geo-body .grid.cols-4{grid-template-columns:repeat(4, minmax(0,1fr));}
+.geo-body .tile{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  background:var(--paper-raised);
+  border:1px solid var(--line);
+  padding:22px 22px 18px;
+}
+.geo-body .tile::before,.geo-body .tile::after{
+  content:"";
+  position:absolute;
+  width:14px;height:14px;
+  pointer-events:none;
+}
+.geo-body .tile::before{top:-1px;left:-1px;border-top:2px solid var(--accent);border-left:2px solid var(--accent);}
+.geo-body .tile::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--accent);border-right:2px solid var(--accent);}
+
+.geo-body .tile-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px;}
+.geo-body .tile-icon{
+  width:42px;height:42px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--accent-tint);
+  color:var(--accent);
+  border-radius:var(--radius);
+  flex:none;
+}
+.geo-body .tile-icon svg{width:22px;height:22px;}
+.geo-body .tile h3{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:21px;
+  text-transform:uppercase;
+  letter-spacing:0.01em;
+  margin:0 0 8px;
+}
+.geo-body .tile p{
+  font-size:13.5px;
+  color:var(--ink-soft);
+  margin:0 0 18px;
+  max-width:34ch;
+}
+.geo-body .tile-cta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:auto;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+  font-size:13.5px;
+  font-weight:600;
+  text-decoration:none;
+  color:var(--ink);
+}
+.geo-body .tile-cta svg{width:14px;height:14px;color:var(--ink-soft);flex:none;transition:transform .12s ease, color .12s ease;}
+.geo-body .tile-cta:hover{color:var(--accent);}
+.geo-body .tile-cta:hover svg{color:var(--accent);transform:translate(2px,-2px);}
+
+/* ---------- pie de esta sección ---------- */
+.geo-body footer.site{
+  margin-top:56px;
+  border-top:1px solid var(--line);
+  padding:22px 0;
+}
+.geo-body .foot-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  font-family:var(--font-mono);
+  font-size:11.5px;
+  color:var(--ink-soft);
+  letter-spacing:0.02em;
+}
+.geo-body .foot-row a{text-decoration:none;font-weight:600;color:var(--ink-soft);}
+.geo-body .foot-row a:hover{color:var(--accent);}
+.geo-body .foot-op{display:flex;align-items:center;gap:6px;}
+.geo-body .foot-op svg{width:12px;height:12px;color:var(--moss);}
+
+@media (max-width:860px){
+  .geo-body .grid{grid-template-columns:1fr;}
+  .geo-body .grid.cols-4{grid-template-columns:1fr;}
+  .geo-body .hero-inner{align-items:flex-start;}
+  .geo-body .hero-stats{gap:22px;}
+}
+@media (max-width:980px) and (min-width:861px){
+  .geo-body .grid.cols-4{grid-template-columns:repeat(2, minmax(0,1fr));}
+}
+@media (max-width:600px){
+  .geo-body .hero-inner{padding-top:48px;padding-bottom:36px;}
+  .geo-body .hero h1{font-size:38px;max-width:100%;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .geo-body .tile-cta svg{transition:none;}
+}
+html,body{margin:0;padding:0;}
+</style>
+</head>
+<body>
+<div class="geo-body">
+
+<section class="hero">
+  <svg class="hero-art" viewBox="0 0 1200 480" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="var(--hero-line)" stroke-width="1.2">
+      <path d="M-50,360 C150,300 300,400 500,340 C700,280 850,360 1050,310 C1150,285 1200,310 1260,290"/>
+      <path d="M-50,290 C180,240 340,320 540,270 C740,220 880,290 1080,245 C1180,222 1230,245 1280,228"/>
+      <path d="M-50,215 C200,175 380,235 560,195 C760,150 900,215 1100,173 C1190,153 1230,173 1280,158"/>
+      <path d="M-50,140 C220,105 400,150 580,120 C760,90 920,140 1100,100"/>
+    </g>
+    <g stroke="var(--hero-accent)" stroke-width="2" stroke-dasharray="2 8" stroke-linecap="round" fill="none" opacity="0.85">
+      <path d="M60,420 C230,385 265,315 420,298 C575,281 615,205 790,196 C905,190 965,150 1100,132"/>
+    </g>
+    <g fill="var(--hero-accent)">
+      <circle cx="60" cy="420" r="5"/>
+      <circle cx="420" cy="298" r="4"/>
+      <circle cx="790" cy="196" r="4"/>
+      <circle cx="1100" cy="132" r="5"/>
+    </g>
+    <g stroke="var(--hero-ink)" stroke-width="1" opacity="0.45">
+      <path d="M60,411 v18 M51,420 h18"/>
+      <path d="M1100,123 v18 M1091,132 h18"/>
+    </g>
+  </svg>
+  <div class="wrap hero-inner">
+    <div class="hero-left">
+      <h1>Geoportal de operaciones</h1>
+      <p>Mapas y paneles en vivo de la operación: poda de árboles, barrido de vías, corte de césped y transporte de residuos.</p>
+    </div>
+    <dl class="hero-stats">
+      <div class="stat">
+        <dd>04</dd>
+        <dt>Visores geográficos</dt>
+      </div>
+      <div class="stat">
+        <dd>03</dd>
+        <dt>Paneles de control</dt>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<main>
+  <div class="wrap services" id="servicios">
+    <div class="section-head">
+      <h2>Accesos rápidos</h2>
+      <span class="hint">SIETE ACCESOS · DOS GRUPOS</span>
+    </div>
+
+    <div class="group">
+      <p class="group-title">Visores geográficos</p>
+      <div class="grid cols-4">
+
+        <article class="tile">
+          <div class="tile-top">
+            <span class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 21v-5"/>
+                <path d="M12 16c-3.5 0-6-2.5-6-5.7C6 7 8.6 4 12 4s6 3 6 6.3c0 3.2-2.5 5.7-6 5.7z"/>
+              </svg>
+            </span>
+          </div>
+          <h3>Poda de árboles</h3>
+          <p>Registro de intervenciones por barrio, cruzado con el inventario arbóreo.</p>
+          <a class="tile-cta" href="https://sigaseo.maps.arcgis.com/apps/dashboards/df6e013c6afa441a97414abb6837bf76" target="_blank" rel="noopener">
+            Abrir visor
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </article>
+
+        <article class="tile">
+          <div class="tile-top">
+            <span class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 3l6 6-7.2 7.2-6-6z"/>
+                <path d="M9.8 13.2L4 19"/>
+                <path d="M3 20h7.5"/>
+              </svg>
+            </span>
+          </div>
+          <h3>Supervisión de rutas de barrido</h3>
+          <p>Seguimiento de microrutas y puntos de barrido en el día.</p>
+          <a class="tile-cta" href="https://sigaseo.maps.arcgis.com/apps/dashboards/0b08302e53464524ba360602fe184e35" target="_blank" rel="noopener">
+            Abrir visor
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </article>
+
+        <article class="tile">
+          <div class="tile-top">
+            <span class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="6.2" cy="6.2" r="2.4"/><circle cx="6.2" cy="17.8" r="2.4"/>
+                <path d="M8 7.7L19 18.3M8 16.3L19 5.7"/>
+              </svg>
+            </span>
+          </div>
+          <h3>Áreas para corte de césped · CLUS</h3>
+          <p>Zonas verdes programadas para corte y mantenimiento.</p>
+          <a class="tile-cta" href="https://sigaseo.maps.arcgis.com/apps/webappviewer/index.html?id=12d1926fd94c48d4959d65f0416b5add" target="_blank" rel="noopener">
+            Abrir visor
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </article>
+
+        <article class="tile">
+          <div class="tile-top">
+            <span class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="9" cy="8" r="3"/>
+                <path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+                <circle cx="17" cy="9" r="2.4"/>
+                <path d="M15.5 14.2c2.3.4 4 2.3 4 4.8"/>
+              </svg>
+            </span>
+          </div>
+          <h3>Censo de usuarios</h3>
+          <p>Ubicación de los usuarios registrados del servicio de aseo.</p>
+          <a class="tile-cta" href="https://sigaseo.maps.arcgis.com/apps/webappviewer/index.html?id=47cb1ad3dbf84a30a1b5a65540f28570" target="_blank" rel="noopener">
+            Abrir visor
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </article>
+
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="group-title">Paneles de control</p>
+      <div class="grid">
+
+        <article class="tile">
+          <div class="tile-top">
+            <span class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3v18"/><path d="M7 21h10"/><path d="M5 7h14"/>
+                <path d="M5 7L3 12a2.5 2.5 0 0 0 5 0z"/><path d="M19 7l-2 5a2.5 2.5 0 0 0 5 0z"/>
+              </svg>
+            </span>
+          </div>
+          <h3>Registro de pesos transportados</h3>
+          <p>Toneladas registradas por vehículo en cada viaje.</p>
+          <a class="tile-cta" href="https://sigaseo.maps.arcgis.com/apps/dashboards/cccc974e2bf34f4eb08d11f77950008f" target="_blank" rel="noopener">
+            Abrir panel
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </article>
+
+        <article class="tile">
+          <div class="tile-top">
+            <span class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="8" width="11" height="8" rx="1"/><path d="M13 11h4l3 3v2h-2"/>
+                <circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/>
+              </svg>
+            </span>
+          </div>
+          <h3>Capacidad mensual transportada por vehículo</h3>
+          <p>Comparativo de capacidad utilizada por vehículo, mes a mes.</p>
+          <a class="tile-cta" href="https://sigaseo.maps.arcgis.com/apps/dashboards/832e044b3900470e855e44a63bd7e51f" target="_blank" rel="noopener">
+            Abrir panel
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </article>
+
+        <article class="tile">
+          <div class="tile-top">
+            <span class="tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19h16"/><path d="M7 19v-7"/><path d="M12 19V6"/><path d="M17 19v-10"/>
+              </svg>
+            </span>
+          </div>
+          <h3>Consolidado mensual de pesos transportados</h3>
+          <p>Totales mensuales de residuos transportados por la operación.</p>
+          <a class="tile-cta" href="https://sigaseo.maps.arcgis.com/apps/dashboards/6191a74213da4f5890021cfc534b3230" target="_blank" rel="noopener">
+            Abrir panel
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site" id="contacto">
+  <div class="wrap foot-row">
+    <span>Santandereana de Aseo S.A.S E.S.P</span>
+    <span class="foot-op">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 20c0-9 6-15 15-15 0 9-6 15-15 15z"/><path d="M6 18c3-3 6-6 11-11"/>
+      </svg>
+      Operado en alianza con EMAF
+    </span>
+    <a href="#contacto">Contacto</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
